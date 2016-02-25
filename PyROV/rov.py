@@ -10,40 +10,35 @@ class ROV:
     obstList = ["#", "%"]
     grabList = ["*", "?", "!", "$"]
 
-    def __init__(self, z, x, y, comp):
+    def __init__(self, z, x, y):
         self.z = z
         self.x = x
         self.y = y
-        self.components = comp
 
     def move(self, dir, world):
         moveable = self.can_move(world)
-        try:
-            if moveable != False and dir in moveable:
-                if dir == 1:
-                    self.y += 1
-                elif dir == 2:
-                    self.x += 1
-                elif dir == 3:
-                    self.y -= 1
-                elif dir == 4:
-                    self.x -= 1
-                elif dir == 5:
-                    self.z += 1
-                elif dir == 6:
-                    self.z -= 1
-                else:
-                    return False
+        if moveable and dir in moveable:
+            if dir == 1:
+                self.y += 1
+            elif dir == 2:
+                self.x += 1
+            elif dir == 3:
+                self.y -= 1
+            elif dir == 4:
+                self.x -= 1
+            elif dir == 5:
+                self.z += 1
+            elif dir == 6:
+                self.z -= 1
             world[self.z][self.x][self.y] = "@"
-            return True
-        except:
-            return False
+        else:
+            print("Thunk.")
 
     def get_coords(self):
         return [self.z self.x, self.y]
 
 
-    def can_move(world):
+    def can_move(self, world):
         moveable = []
         if world[self.z][self.x][self.y + 1] not in self.obst:
             moveable.append(1)
@@ -57,8 +52,5 @@ class ROV:
             moveable.append(5)
         if world[self.z - 1][self.x][self.y] not in self.obst:
             moveable.append(6)
-        if len(moveable) == 0:
-            return False
-        else:
-            return moveable
+        return moveable
         
