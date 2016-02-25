@@ -19,7 +19,7 @@ class ROV:
     def move(self, dir, world):
         moveable = self.can_move(world)
         try:
-            if moveable != False and dir in moveable:
+            if moveable is not None and dir in moveable:
                 if dir == 1:
                     self.y += 1
                 elif dir == 2:
@@ -32,12 +32,9 @@ class ROV:
                     self.z += 1
                 elif dir == 6:
                     self.z -= 1
-                else:
-                    return False
             world[self.z][self.x][self.y] = "@"
-            return True
         except:
-            return False
+            return None
 
     def get_coords(self):
         return [self.z self.x, self.y]
@@ -58,7 +55,7 @@ class ROV:
         if world[self.z - 1][self.x][self.y] not in self.obst:
             moveable.append(6)
         if len(moveable) == 0:
-            return False
+            return None
         else:
             return moveable
         
