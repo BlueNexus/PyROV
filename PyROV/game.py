@@ -29,8 +29,8 @@ def print_world(current, cX, cY):
     for row in range(cX - 5, cX + 5):
         wX = working[row]
         fX = []
-        for col in wX:
-            fX.append(col.icon)
+        for col in (cY - 5, cX + 5):
+            fX.append(wX[col].icon)
         fX_joined = str(''.join(fX))
         print(fX_joined + "\n")
         
