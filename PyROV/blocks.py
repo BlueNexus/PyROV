@@ -12,3 +12,6 @@ class Water(Block):
     name = "Water"
     icon = "."
     passable = True
+
+class Rock(Block):
+    name = "Rock Wall"
