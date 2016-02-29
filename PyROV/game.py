@@ -1,10 +1,9 @@
 import entity
-import enviro
+import blocks
 import objects
-import setup
 import os
 import sys
-
+import random
 
 
 world = []
@@ -33,4 +32,9 @@ def print_world(current, cX, cY):
             fX.append(wX[col].icon)
         fX_joined = str(''.join(fX))
         print(fX_joined + "\n")
-        
+
+start_z = random.randint(1, (len(world) + 1))
+start_x = random.randint(1, (len(world[1]) + 1))
+start_y = random.randint(1, (len(world[1][1]) + 1))
+player = entity.ROV(start_z, start_x, start_y, world)
+world[player.z][player.x][player.y] = player
