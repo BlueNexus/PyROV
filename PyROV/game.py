@@ -99,5 +99,5 @@ world[player.z][player.x][player.y] = player
 
 while True:
     print_world(player.z, player.x, player.y)
-    handle_input(raw_input("").upper())
+    handle_input(str(raw_input("")).upper())
 
