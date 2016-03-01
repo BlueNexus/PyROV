@@ -43,17 +43,17 @@ class Entity:
 
     def can_move(self, world):
         moveable = []
-        if world[self.z][self.x][self.y + 1].passable = True:
+        if world[self.z][self.x][self.y + 1].passable == True:
             moveable.append(1)
-        if world[self.z][self.x + 1][self.y].passable = True:
+        if world[self.z][self.x + 1][self.y].passable == True:
             moveable.append(2)
-        if world[self.z][self.x][self.y - 1].passable = True:
+        if world[self.z][self.x][self.y - 1].passable == True:
             moveable.append(3)
-        if world[self.z][self.x - 1][self.y].passable = True:
+        if world[self.z][self.x - 1][self.y].passable == True:
             moveable.append(4)
-        if world[self.z + 1][self.x][self.y].passable = True:
+        if world[self.z + 1][self.x][self.y].passable == True:
             moveable.append(5)
-        if world[self.z - 1][self.x][self.y].passable = True:
+        if world[self.z - 1][self.x][self.y].passable == True:
             moveable.append(6)
         return moveable
 
