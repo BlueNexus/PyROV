@@ -28,9 +28,9 @@ def make_world(z, x, y):
             wX = []
             for col in range(y):
                 if random.randint(0, 100) > 10:
-                    wY = blocks.Water()
+                    wY = blocks.Water(plane, row, col)
                 else:
-                    wY = blocks.Rock()
+                    wY = blocks.Rock(plane, row, col)
                 wX.append(wY)
             wZ.append(wX)
         working.append(wZ)
