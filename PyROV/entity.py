@@ -83,7 +83,7 @@ class ROV(Entity):
 
     def grab(self, item, world):
         if item.can_grab:
-            world[item.z][item.x][item.y] = block.Water()
+            world[item.z][item.x][item.y] = blocks.Water(item.z, item.x, item.y)
             item.z, item.x, item.y = None
             self.inventory.append(item)
             print("Picked up " + item.name)
