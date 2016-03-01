@@ -112,7 +112,7 @@ class ROV(Entity):
         for i in self.inventory:
             print(i.name)
 
-    def use(self, item):
+    def use(self):
         self.show_inventory()
         choice = str(raw_input("Choose an item to use: ")).upper
         for i in self.inventory:
