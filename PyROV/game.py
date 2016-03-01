@@ -70,7 +70,7 @@ def handle_input(inp):
             show_commands()
         elif inp == "I":
             player.show_inventory()
-        elif imp == "G":
+        elif inp == "G":
             available = player.get_adjacent_items(world)
             print("Adjacent items: ")
             for item in available:
@@ -84,7 +84,7 @@ def handle_input(inp):
                     break
             if not valid:
                 print("Invalid item!")
-        elif imp == "F":
+        elif inp == "F":
             player.drop(world)
     else:
         print("Invalid command. Enter '?' for a list of commands.")
