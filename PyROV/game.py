@@ -13,9 +13,9 @@ WORLDGEN_OBJECT_CHANCE = 1
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
             "A": "Move left", "S": "Move back", "D": "Move right",
-            "?": "Show commands", "I": "Show inventory", "G": "Grab",
-            "F": "Drop"}
-commands_list = ["Q", "W", "E", "A", "S", "D", "?", "I", "G", "F"]
+            "U": "Use item", "?": "Show commands", "I": "Show inventory", 
+            "G": "Grab", "F": "Drop"}
+commands_list = ["Q", "W", "E", "A", "S", "D", "U", "?", "I", "G", "F"]
 world = []
 
 def make_world(z, x, y):
@@ -77,6 +77,8 @@ def handle_input(inp):
             player.move(2, world)
         elif inp == "D":
             player.move(1, world)
+        elif inp == "U":
+            player.use()
         elif inp == "?":
             show_commands()
         elif inp == "I":
@@ -113,7 +115,7 @@ while True:
         make_world(WORLD_Z, WORLD_X, WORLD_Y)
         while True:
             print_world(player.z, player.x, player.y)
-            handle_input(str(raw_input("")).upper())
+            handle_input(str(raw_input(">>: ")).upper())
     elif choice == "Options":
         global WORLD_Z
         global WORLD_X
