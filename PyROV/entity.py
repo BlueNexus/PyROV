@@ -57,6 +57,17 @@ class Entity:
             moveable.append(6)
         return moveable
 
+    def get_adjacent_items(self, world):
+        adjacent = []
+        adjacent.append(world[self.z][self.x][self.y + 1])
+        adjacent.append(world[self.z][self.x][self.y - 1])
+        adjacent.append(world[self.z][self.x][self.x + 1])
+        adjacent.append(world[self.z][self.x][self.x - 1])
+        adjacent.append(world[self.z][self.x + 1][self.y + 1])
+        adjacent.append(world[self.z][self.x - 1][self.y + 1])
+        adjacent.append(world[self.z][self.x + 1][self.y - 1])
+        adjacent.append(world[self.z][self.x - 1][self.y - 1])
+        return adjacent
 
 class ROV(Entity):
     inventory = []
