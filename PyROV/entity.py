@@ -67,6 +67,9 @@ class Entity:
         adjacent.append(world[self.z][self.x - 1][self.y + 1])
         adjacent.append(world[self.z][self.x + 1][self.y - 1])
         adjacent.append(world[self.z][self.x - 1][self.y - 1])
+        for thing in adjacent:
+            if isinstance(thing, blocks.Block):
+                adjacent.remove(thing)
         return adjacent
 
 class ROV(Entity):
