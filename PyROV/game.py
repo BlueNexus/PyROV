@@ -38,10 +38,10 @@ def make_world(z, x, y):
 def print_world(cZ, cX, cY):
     global world
     working = world[cZ]
-    for row in range(cX - 5, cX + 5):
+    for row in range(cX - 6, cX + 6):
         wX = working[row]
         fX = []
-        for col in range(cY - 5, cY + 5):
+        for col in range(cY - 6, cY + 6):
             fX.append(wX[col].icon)
         fX_joined = ''.join(fX)
         print(fX_joined)
@@ -57,15 +57,15 @@ def handle_input(inp):
         if inp == "Q":
             player.move(5, world)
         elif inp == "W":
-            player.move(1, world)
+            player.move(4, world)
         elif inp == "E":
             player.move(6, world)
         elif inp == "A":
-            player.move(4, world)
-        elif inp == "S":
             player.move(3, world)
-        elif inp == "D":
+        elif inp == "S":
             player.move(2, world)
+        elif inp == "D":
+            player.move(1, world)
         elif inp == "?":
             show_commands()
         elif inp == "I":
@@ -99,5 +99,5 @@ world[player.z][player.x][player.y] = player
 
 while True:
     print_world(player.z, player.x, player.y)
-    handle_input(str(raw_input("Enter a command: ")))
+    handle_input(raw_input("").upper())
 
