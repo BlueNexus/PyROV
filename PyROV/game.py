@@ -1,14 +1,14 @@
 import entity
 import blocks
 import objects
-import os
-import sys
 import random
 
 # CONFIG
 WORLD_Z = 20
 WORLD_X = 40
 WORLD_Y = 40
+WORLDGEN_ROCK_CHANCE = 15
+WORLDGEN_OBJECT_CHANCE = 1
 # END CONFIG
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
@@ -19,21 +19,33 @@ commands_list = ["Q", "W", "E", "A", "S", "D", "?", "I", "G", "F"]
 world = []
 
 def make_world(z, x, y):
+    print("Generating world...")
     working = []
     for plane in range(z):
+        print("Generating Z-level " + str(plane) + " of " + str(z))
         wZ = []
         for row in range(x):
             wX = []
             for col in range(y):
-                if random.randint(0, 100) > 15:
+                rand = random.randint(0, 100)
+                if rand > WORLDGEN_ROCK_CHANCE:
                     wY = blocks.Water(plane, row, col)
-                else:
+                elif rand > WORLDGEN_OBJECT_CHANCE:
                     wY = blocks.Rock(plane, row, col)
+                else:
+                    wY = Objects.Object(plane, row, col)
                 wX.append(wY)
             wZ.append(wX)
         working.append(wZ)
     global world
     world = working
+    print("Creating the player...")
+    start_z = z / 2
+    start_x = x / 2
+    start_y = y / 2
+    player = entity.ROV(start_z, start_x, start_y, world)
+    world[player.z][player.x][player.y] = player
+    print("Generation complete!")
 
 def print_world(cZ, cX, cY):
     global world
@@ -51,7 +63,6 @@ def show_commands():
     print(commands_dict)
 
 def handle_input(inp):
-    global commands_list
     global world
     if inp in commands_list:
         if inp == "Q":
@@ -89,15 +100,44 @@ def handle_input(inp):
     else:
         print("Invalid command. Enter '?' for a list of commands.")
 
-# World generation
-make_world(WORLD_Z, WORLD_X, WORLD_Y)
-start_z = WORLD_Z / 2
-start_x = WORLD_X / 2
-start_y = WORLD_Y / 2
-player = entity.ROV(start_z, start_x, start_y, world)
-world[player.z][player.x][player.y] = player
+def options_get_value(choice):
+    return int(raw_input("Enter a value for " + str(editing))
 
+print("PyROV: v0.14.0-Alpha")
+print("-" * 10)
 while True:
-    print_world(player.z, player.x, player.y)
-    handle_input(str(raw_input("")).upper())
-
+    print("1. Start")
+    print("2. Options")
+    choice = str(raw_input("Enter your choice (Start/Options)")).upper
+    if choice == "Start":
+        make_world(WORLD_Z, WORLD_X, WORLD_Y)
+        while True:
+            print_world(player.z, player.x, player.y)
+            handle_input(str(raw_input("")).upper())
+    elif choice == "Options":
+        global WORLD_Z
+        global WORLD_X
+        global WORLD_Y
+        global WORLDGEN_ROCK_CHANCE
+        global WORLDGEN_OBJECT_CHANCE
+        print("Z-levels: " + str(WORLD_Z))
+        print("X-levels: " + str(WORLD_X))
+        print("Y-levels: " + str(WORLD_Y))
+        print("Worldgen rock chance: " + str(WORLDGEN_ROCK_CHANCE))
+        print("Worldgen object chance: " + str(WORLDGEN_OBJECT_CHANCE))
+        editing = str(raw_input("Choose which setting to change, or enter "Exit" to go back to the menu")).upper
+        try:
+            if editing == "Z-levels":
+                WORLD_Z = options_get_value(editing)
+            elif editing == "X-levels":
+                WORLD_X = options_get_value(editing)
+            elif editing == "Y-levels":
+                WORLD_Y = options_get_value(editing)
+            elif editing == "Worldgen Rock Chance":
+                WORLDGEN_ROCK_CHANCE = options_get_value(editing)
+            elif editing == "Worldgen Object Chance":
+                WORLDGEN_OBJECT_CHANCE = options_get_value(editing)
+            else:
+                pass
+        except:
+            pass
