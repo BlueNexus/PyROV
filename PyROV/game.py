@@ -6,9 +6,9 @@ import sys
 import random
 
 # CONFIG
-WORLD_Z = 10
-WORLD_X = 20
-WORLD_Y = 20
+WORLD_Z = 20
+WORLD_X = 40
+WORLD_Y = 40
 # END CONFIG
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
@@ -25,7 +25,7 @@ def make_world(z, x, y):
         for row in range(x):
             wX = []
             for col in range(y):
-                if random.randint(0, 100) > 10:
+                if random.randint(0, 100) > 15:
                     wY = blocks.Water(plane, row, col)
                 else:
                     wY = blocks.Rock(plane, row, col)
@@ -91,9 +91,9 @@ def handle_input(inp):
 
 # World generation
 make_world(WORLD_Z, WORLD_X, WORLD_Y)
-start_z = random.randint(0, WORLD_Z)
-start_x = random.randint(0, WORLD_X)
-start_y = random.randint(0, WORLD_Y)
+start_z = WORLD_Z / 2
+start_x = WORLD_X / 2
+start_y = WORLD_Y / 2
 player = entity.ROV(start_z, start_x, start_y, world)
 world[player.z][player.x][player.y] = player
 
