@@ -74,7 +74,7 @@ def handle_input(inp):
             available = player.get_adjacent_items(world)
             print("Adjacent items: ")
             for item in available:
-                print(item.name + "\n")
+                print(item.name)
             chose = str(raw_input("Choose which item to grab: "))
             valid = False
             for item in available:
