@@ -1,7 +1,6 @@
 import blocks
 import objects
 import random
-import components
 
 # 1 = north
 # 2 = east
