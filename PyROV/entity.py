@@ -1,6 +1,7 @@
 import blocks
 import objects
 import random
+import components
 
 # 1 = north
 # 2 = east
@@ -75,11 +76,48 @@ class Entity:
 class ROV(Entity):
     inventory = []
     icon = "@"
+    cell = components.Basic()
+
+    def move(self, direc, world):
+        moveable = self.can_move(world)
+        if moveable and direc in moveable:
+            world[self.z][self.x][self.y] = blocks.Water(self.z, self.x, self.y)
+            if direc == 1:
+                self.y += 1
+            elif direc == 2:
+                self.x += 1
+            elif direc == 3:
+                self.y -= 1
+            elif direc == 4:
+                self.x -= 1
+            elif direc == 5:
+                self.z += 1
+            elif direc == 6:
+                self.z -= 1
+            world[self.z][self.x][self.y] = self
+        else:
+            print("Thunk.")
+        self.power_tick(20)
+
+    def shutdown(self):
+        pass # todo
+
+    def power_tick(self, cost):
+        self.cell.power -= cost
+        if self.cell.power <= 0:
+            self.shutdown()
 
     def show_inventory(self):
         print("Items in inventory: ")
         for i in self.inventory:
             print(i.name)
+
+    def use(self, item):
+        self.show_inventory()
+        choice = str(raw_input("Choose an item to use: ")).upper
+        for i in self.inventory:
+            if i.name == choice:
+                i.activate()
 
     def grab(self, item, world):
         try:
@@ -88,6 +126,7 @@ class ROV(Entity):
                 item.z, item.x, item.y = self.get_coords()
                 self.inventory.append(item)
                 print("Picked up " + item.name)
+                self.power_tick(10)
             else:
                 print("It's stuck!")
         except:
@@ -110,3 +149,4 @@ class ROV(Entity):
                 item.x -= 1
             world[item.z][item.x][item.y] = item
             self.inventory.remove(item)
+            self.power_tick(10)
