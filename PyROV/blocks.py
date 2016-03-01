@@ -10,7 +10,7 @@ class Block:
 
 class Water(Block):
     name = "Water"
-    icon = "."
+    icon = "~"
     passable = True
 
 class Rock(Block):
