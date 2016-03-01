@@ -4,7 +4,6 @@ import objects
 import os
 import sys
 import random
-import readchar
 
 # CONFIG
 WORLD_Z = 10
@@ -18,7 +17,6 @@ commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
             "F": "Drop"}
 commands_list = ["Q", "W", "E", "A", "S", "D", "?", "I", "G", "F"]
 world = []
-clear = lambda: os.system('cls')
 
 def make_world(z, x, y):
     working = []
@@ -93,14 +91,13 @@ def handle_input(inp):
 
 # World generation
 make_world(WORLD_Z, WORLD_X, WORLD_Y)
-start_z = random.randint(0, (len(world) + 1))
-start_x = random.randint(0, (len(world[1]) + 1))
-start_y = random.randint(0, (len(world[1][1]) + 1))
+start_z = random.randint(0, WORLD_Z)
+start_x = random.randint(0, WORLD_X)
+start_y = random.randint(0, WORLD_Y)
 player = entity.ROV(start_z, start_x, start_y, world)
 world[player.z][player.x][player.y] = player
 
 while True:
-    clear()
     print_world(player.z, player.x, player.y)
-    handle_input(readchar.readchar())
+    handle_input(str(raw_input("Enter a command: ")))
 
