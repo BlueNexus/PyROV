@@ -1,11 +1,9 @@
 class Object:
-    
-    def __init__(self, oName, oDesc, oSym, oVol, x, y, z):
-        self.name = oName
-        self.desc = oDesc
-        self.symbol = oSym
-        self.volume = oVol
+    name = "Example"
+    icon = "*"
+    can_grab = True
+
+    def __init__(self, x, y, z):
         self.z = z
         self.x = x
         self.y = y
-        self.inside = None
