@@ -88,6 +88,8 @@ class ROV(Entity):
                 item.z, item.x, item.y = self.get_coords()
                 self.inventory.append(item)
                 print("Picked up " + item.name)
+            else:
+                print("It's stuck!")
         except:
             print("It's too big!")
     
