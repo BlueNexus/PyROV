@@ -43,7 +43,7 @@ def print_world(cZ, cX, cY):
         fX = []
         for col in range(cY - 6, cY + 6):
             fX.append(wX[col].icon)
-        fX_joined = ''.join(fX)
+        fX_joined = ' '.join(fX)
         print(fX_joined)
 
 def show_commands():
