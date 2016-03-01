@@ -41,10 +41,10 @@ def print_world(cZ, cX, cY):
     for row in range(cX - 5, cX + 5):
         wX = working[row]
         fX = []
-        for col in (cY - 5, cX + 5):
+        for col in range(cY - 5, cY + 5):
             fX.append(wX[col].icon)
-        fX_joined = str(''.join(fX))
-        print(fX_joined + "\n")
+        fX_joined = ''.join(fX)
+        print(fX_joined)
 
 def show_commands():
     global commands_dict
