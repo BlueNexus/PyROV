@@ -21,7 +21,7 @@ class Entity:
     def move(self, direc, world):
         moveable = self.can_move(world)
         if moveable and direc in moveable:
-            world[self.z][self.x][self.y] = blocks.Water(self.get_coords())
+            world[self.z][self.x][self.y] = blocks.Water(self.z, self.x, self.y)
             if direc == 1:
                 self.y += 1
             elif direc == 2:
@@ -52,7 +52,7 @@ class Entity:
         if world[self.z][self.x - 1][self.y].passable == True:
             moveable.append(4)
         if world[self.z + 1][self.x][self.y].passable == True:
-            moveable.append(5)
+            moveable.append(5)  
         if world[self.z - 1][self.x][self.y].passable == True:
             moveable.append(6)
         return moveable
