@@ -82,11 +82,14 @@ class ROV(Entity):
             print(i.name)
 
     def grab(self, item, world):
-        if item.can_grab:
-            world[item.z][item.x][item.y] = blocks.Water(item.z, item.x, item.y)
-            item.z, item.x, item.y = None
-            self.inventory.append(item)
-            print("Picked up " + item.name)
+        try:
+            if item.can_grab:
+                world[item.z][item.x][item.y] = blocks.Water(item.z, item.x, item.y)
+                item.z, item.x, item.y = self.get_coords()
+                self.inventory.append(item)
+                print("Picked up " + item.name)
+        except:
+            print("It's too big!")
     
     def drop(self, world):
         self.show_inventory()
