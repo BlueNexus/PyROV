@@ -1,6 +1,7 @@
 import blocks
 import objects
 import random
+import time
 
 # 1 = north
 # 2 = east
@@ -12,7 +13,8 @@ import random
 
 class Entity:
     icon = "e"
-    
+    can_move = True
+
     def __init__(self, z, x, y, world):
         self.z = z
         self.x = x
@@ -43,17 +45,17 @@ class Entity:
 
     def can_move(self, world):
         moveable = []
-        if world[self.z][self.x][self.y + 1].passable == True:
+        if world[self.z][self.x][self.y + 1].passable:
             moveable.append(1)
-        if world[self.z][self.x + 1][self.y].passable == True:
+        if world[self.z][self.x + 1][self.y].passable:
             moveable.append(2)
-        if world[self.z][self.x][self.y - 1].passable == True:
+        if world[self.z][self.x][self.y - 1].passable:
             moveable.append(3)
-        if world[self.z][self.x - 1][self.y].passable == True:
+        if world[self.z][self.x - 1][self.y].passable:
             moveable.append(4)
-        if world[self.z + 1][self.x][self.y].passable == True:
-            moveable.append(5)  
-        if world[self.z - 1][self.x][self.y].passable == True:
+        if world[self.z + 1][self.x][self.y].passable:
+            moveable.append(5)
+        if world[self.z - 1][self.x][self.y].passable:
             moveable.append(6)
         return moveable
 
@@ -72,6 +74,7 @@ class Entity:
                 adjacent.remove(thing)
         return adjacent
 
+
 class ROV(Entity):
     inventory = []
     icon = "@"
@@ -79,27 +82,33 @@ class ROV(Entity):
 
     def move(self, direc, world):
         moveable = self.can_move(world)
-        if moveable and direc in moveable:
-            world[self.z][self.x][self.y] = blocks.Water(self.z, self.x, self.y)
-            if direc == 1:
-                self.y += 1
-            elif direc == 2:
-                self.x += 1
-            elif direc == 3:
-                self.y -= 1
-            elif direc == 4:
-                self.x -= 1
-            elif direc == 5:
-                self.z += 1
-            elif direc == 6:
-                self.z -= 1
-            world[self.z][self.x][self.y] = self
+        if self.can_move:
+            if moveable and direc in moveable:
+                world[self.z][self.x][self.y] = blocks.Water(self.z, self.x, self.y)
+                if direc == 1:
+                    self.y += 1
+                elif direc == 2:
+                    self.x += 1
+                elif direc == 3:
+                    self.y -= 1
+                elif direc == 4:
+                    self.x -= 1
+                elif direc == 5:
+                    self.z += 1
+                elif direc == 6:
+                    self.z -= 1
+                world[self.z][self.x][self.y] = self
+            else:
+                print("Thunk.")
+            self.power_tick(20)
         else:
-            print("Thunk.")
-        self.power_tick(20)
+            print("You can't move!")
 
     def shutdown(self):
-        pass # todo
+        self.can_move = False
+        print("Game Over.")
+        time.sleep(3)
+        exit()
 
     def power_tick(self, cost):
         self.cell.power -= cost
