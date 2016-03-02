@@ -105,7 +105,7 @@ class ROV(Entity):
                 world[self.z][self.x][self.y] = self
             else:
                 print("Thunk.")
-            self.power_tick(20)
+            self.power_tick(10)
         else:
             print("You can't move!")
 
@@ -127,7 +127,7 @@ class ROV(Entity):
 
     def use(self):
         self.show_inventory()
-        choice = str(raw_input("Choose an item to use: ")).upper
+        choice = str(raw_input("Choose an item to use: ")).title()
         for i in self.inventory:
             if i.name == choice:
                 i.activate()
@@ -139,7 +139,7 @@ class ROV(Entity):
                 item.z, item.x, item.y = self.get_coords()
                 self.inventory.append(item)
                 print("Picked up " + item.name)
-                self.power_tick(10)
+                self.power_tick(5)
             else:
                 print("It's stuck!")
         except:
@@ -162,4 +162,4 @@ class ROV(Entity):
                 item.x -= 1
             world[item.z][item.x][item.y] = item
             self.inventory.remove(item)
-            self.power_tick(10)
+            self.power_tick(5)
