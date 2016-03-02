@@ -78,7 +78,12 @@ class Entity:
 class ROV(Entity):
     inventory = []
     icon = "@"
-    cell = components.Basic()
+
+    def __init__(self, z, x, y):
+        self.z = z
+        self.x = x
+        self.y = y
+        self.cell = objects.CellBasic(self.z, self.x, self.y)
 
     def move(self, direc, world):
         moveable = self.can_move(world)
