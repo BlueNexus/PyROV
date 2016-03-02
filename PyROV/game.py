@@ -17,6 +17,7 @@ commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
             "G": "Grab", "F": "Drop"}
 commands_list = ["Q", "W", "E", "A", "S", "D", "U", "?", "I", "G", "F"]
 world = []
+player = None
 
 def make_world(z, x, y):
     print("Generating world...")
@@ -33,17 +34,18 @@ def make_world(z, x, y):
                 elif rand > WORLDGEN_OBJECT_CHANCE:
                     wY = blocks.Rock(plane, row, col)
                 else:
-                    wY = Objects.Object(plane, row, col)
+                    wY = objects.Object(plane, row, col)
                 wX.append(wY)
             wZ.append(wX)
         working.append(wZ)
     global world
+    global player
     world = working
     print("Creating the player...")
     start_z = z / 2
     start_x = x / 2
     start_y = y / 2
-    player = entity.ROV(start_z, start_x, start_y, world)
+    player = entity.ROV(start_z, start_x, start_y)
     world[player.z][player.x][player.y] = player
     print("Generation complete!")
 
@@ -88,7 +90,7 @@ def handle_input(inp):
             print("Adjacent items: ")
             for item in available:
                 print(item.name)
-            chose = str(raw_input("Choose which item to grab: "))
+            chose = str(raw_input("Choose which item to grab > "))
             valid = False
             for item in available:
                 if chose == item.name:
@@ -103,19 +105,21 @@ def handle_input(inp):
         print("Invalid command. Enter '?' for a list of commands.")
 
 def options_get_value(choice):
-    return int(raw_input("Enter a value for " + str(editing)))
+    return int(raw_input("Enter a value for " + str(editing) + " > "))
 
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
 while True:
     print("1. Start")
     print("2. Options")
-    choice = str(raw_input("Enter your choice (Start/Options)")).upper
+    choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
     if choice == "Start":
         make_world(WORLD_Z, WORLD_X, WORLD_Y)
         while True:
             print_world(player.z, player.x, player.y)
-            handle_input(str(raw_input(">> ")).upper())
+            print("Power remaining: " + str(player.cell.power))
+            handle_input(str(raw_input(">> ")).title())
+
     elif choice == "Options":
         global WORLD_Z
         global WORLD_X
@@ -127,7 +131,7 @@ while True:
         print("Y-levels: " + str(WORLD_Y))
         print("Worldgen rock chance: " + str(WORLDGEN_ROCK_CHANCE))
         print("Worldgen object chance: " + str(WORLDGEN_OBJECT_CHANCE))
-        editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu")).upper
+        editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
         try:
             if editing == "Z-levels":
                 WORLD_Z = options_get_value(editing)
