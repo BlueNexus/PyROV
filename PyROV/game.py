@@ -103,7 +103,7 @@ def handle_input(inp):
         print("Invalid command. Enter '?' for a list of commands.")
 
 def options_get_value(choice):
-    return int(raw_input("Enter a value for " + str(editing))
+    return int(raw_input("Enter a value for " + str(editing)))
 
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
@@ -115,7 +115,7 @@ while True:
         make_world(WORLD_Z, WORLD_X, WORLD_Y)
         while True:
             print_world(player.z, player.x, player.y)
-            handle_input(str(raw_input(">>: ")).upper())
+            handle_input(str(raw_input(">> ")).upper())
     elif choice == "Options":
         global WORLD_Z
         global WORLD_X
@@ -127,7 +127,7 @@ while True:
         print("Y-levels: " + str(WORLD_Y))
         print("Worldgen rock chance: " + str(WORLDGEN_ROCK_CHANCE))
         print("Worldgen object chance: " + str(WORLDGEN_OBJECT_CHANCE))
-        editing = str(raw_input("Choose which setting to change, or enter "Exit" to go back to the menu")).upper
+        editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu")).upper
         try:
             if editing == "Z-levels":
                 WORLD_Z = options_get_value(editing)
