@@ -3,17 +3,15 @@ import blocks
 import objects
 import random
 
-# CONFIG
 WORLD_Z = 20
 WORLD_X = 40
 WORLD_Y = 40
 WORLDGEN_ROCK_CHANCE = 15
 WORLDGEN_OBJECT_CHANCE = 1
-# END CONFIG
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
             "A": "Move left", "S": "Move back", "D": "Move right",
-            "U": "Use item", "?": "Show commands", "I": "Show inventory", 
+            "U": "Use item", "?": "Show commands", "I": "Show inventory",
             "G": "Grab", "F": "Drop"}
 commands_list = ["Q", "W", "E", "A", "S", "D", "U", "?", "I", "G", "F"]
 world = []
@@ -90,7 +88,7 @@ def handle_input(inp):
             print("Adjacent items: ")
             for item in available:
                 print(item.name)
-            chose = str(raw_input("Choose which item to grab > "))
+            chose = str(raw_input("Choose which item to grab > ")).title()
             valid = False
             for item in available:
                 if chose == item.name:
@@ -133,11 +131,11 @@ while True:
         print("Worldgen object chance: " + str(WORLDGEN_OBJECT_CHANCE))
         editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
         try:
-            if editing == "Z-levels":
+            if editing == "Z-Levels":
                 WORLD_Z = options_get_value(editing)
-            elif editing == "X-levels":
+            elif editing == "X-Levels":
                 WORLD_X = options_get_value(editing)
-            elif editing == "Y-levels":
+            elif editing == "Y-Levels":
                 WORLD_Y = options_get_value(editing)
             elif editing == "Worldgen Rock Chance":
                 WORLDGEN_ROCK_CHANCE = options_get_value(editing)
