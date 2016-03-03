@@ -12,6 +12,8 @@ import time
 
 
 class Entity:
+    can_grab = False
+    name = ""
     icon = "e"
     can_move = True
 
@@ -78,6 +80,7 @@ class Entity:
 
 
 class ROV(Entity):
+    name = "ROV"
     inventory = []
     icon = "@"
 
@@ -129,39 +132,40 @@ class ROV(Entity):
 
     def use(self):
         self.show_inventory()
-        choice = str(raw_input("Choose an item to use: ")).title()
+        choice = str(raw_input("Choose an item to use: "))
         for i in self.inventory:
             if i.name == choice:
                 i.activate()
 
     def grab(self, item, world):
-        try:
-            if item.can_grab:
-                world[item.z][item.x][item.y] = blocks.Water(item.z, item.x, item.y)
-                item.z, item.x, item.y = self.get_coords()
-                self.inventory.append(item)
-                print("Picked up " + item.name)
-                self.power_tick(5)
-            else:
-                print("It's stuck!")
-        except:
-            print("It's too big!")
+        if item.can_grab:
+            world[item.z][item.x][item.y] = blocks.Water(item.z, item.x, item.y)
+            item.z, item.x, item.y = self.get_coords()
+            self.inventory.append(item)
+            print("Picked up " + item.name)
+            self.power_tick(5)
+        else:
+            print("It's stuck!")
     
     def drop(self, world):
         self.show_inventory()
         item = str(raw_input("Choose an item to drop: "))
-        if item in self.inventory:
-            item.z, item.x, item.y = self.get_coords()
-            avail = self.can_move(world)
-            direc = random.randint(1, 5)
-            if direc == 1:
-                item.y += 1
-            elif direc == 2:
-                item.x += 1
-            elif direc == 3:
-                item.y -= 1
-            elif direc == 4:
-                item.x -= 1
-            world[item.z][item.x][item.y] = item
-            self.inventory.remove(item)
-            self.power_tick(5)
+        for i in self.inventory:
+            if i.name == item:
+                i.z, i.x, i.y = self.get_coords()
+                avail = self.can_move(world)
+                direc = random.randint(1, 5)
+                if direc == 1:
+                    i.y += 1
+                elif direc == 2:
+                    i.x += 1
+                elif direc == 3:
+                    i.y -= 1
+                elif direc == 4:
+                    i.x -= 1
+                world[item.z][item.x][item.y] = item
+                self.inventory.remove(item)
+                self.power_tick(5)
+                break
+        else:
+            print("You don't have a " + item + "!")
