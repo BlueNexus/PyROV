@@ -3,11 +3,13 @@ import blocks
 import objects
 import random
 
+# CONFIG
 WORLD_Z = 20
 WORLD_X = 40
 WORLD_Y = 40
 WORLDGEN_ROCK_CHANCE = 15
 WORLDGEN_OBJECT_CHANCE = 1
+# END CONFIG
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
             "A": "Move left", "S": "Move back", "D": "Move right",
