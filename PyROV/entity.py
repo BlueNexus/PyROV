@@ -72,6 +72,8 @@ class Entity:
         for thing in adjacent:
             if isinstance(thing, blocks.Block):
                 adjacent.remove(thing)
+            if thing == self:
+                adjacent.remove(thing)
         return adjacent
 
 
