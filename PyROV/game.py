@@ -90,7 +90,7 @@ def handle_input(inp):
             print("Adjacent items: ")
             for item in available:
                 print(item.name)
-            chose = str(raw_input("Choose which item to grab > ")).title()
+            chose = str(raw_input("Choose which item to grab > "))
             valid = False
             for item in available:
                 if chose == item.name:
