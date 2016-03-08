@@ -22,44 +22,9 @@ class Entity:
         self.x = x
         self.y = y
 
-    def move(self, direc, world):
-        moveable = self.can_move(world)
-        if moveable and direc in moveable:
-            world[self.z][self.x][self.y] = blocks.Water(self.z, self.x, self.y)
-            if direc == 1:
-                self.y += 1
-            elif direc == 2:
-                self.x += 1
-            elif direc == 3:
-                self.y -= 1
-            elif direc == 4:
-                self.x -= 1
-            elif direc == 5:
-                self.z += 1
-            elif direc == 6:
-                self.z -= 1
-            world[self.z][self.x][self.y] = self
-        else:
-            print("Thunk.")
-
     def get_coords(self):
         return self.z, self.x, self.y
 
-    def can_move(self, world):
-        moveable = []
-        if world[self.z][self.x][self.y + 1].passable:
-            moveable.append(1)
-        if world[self.z][self.x + 1][self.y].passable:
-            moveable.append(2)
-        if world[self.z][self.x][self.y - 1].passable:
-            moveable.append(3)
-        if world[self.z][self.x - 1][self.y].passable:
-            moveable.append(4)
-        if world[self.z + 1][self.x][self.y].passable:
-            moveable.append(5)
-        if world[self.z - 1][self.x][self.y].passable:
-            moveable.append(6)
-        return moveable
 
     def get_adjacent_items(self, world):
         adjacent = []
