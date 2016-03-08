@@ -2,6 +2,7 @@ class Block:
     name = ""
     icon = "#"
     passable = False
+    can_grab = False
     
     def __init__(self, z, x, y):
         self.z = z
@@ -10,7 +11,7 @@ class Block:
 
 class Water(Block):
     name = "Water"
-    icon = "~"
+    icon = "."
     passable = True
 
 class Rock(Block):
