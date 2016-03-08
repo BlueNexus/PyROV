@@ -9,6 +9,8 @@ WORLD_X = 40
 WORLD_Y = 40
 WORLDGEN_ROCK_CHANCE = 15
 WORLDGEN_OBJECT_CHANCE = 1
+PLAYER_VIEW_X = 6
+PLAYER_VIEW_Y = 6
 # END CONFIG
 
 commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
@@ -52,10 +54,10 @@ def make_world(z, x, y):
 def print_world(cZ, cX, cY):
     global world
     working = world[cZ]
-    for row in range(cX - 6, cX + 6):
+    for row in range(cX - PLAYER_VIEW_X, cX + PLAYER_VIEW_X):
         wX = working[row]
         fX = []
-        for col in range(cY - 6, cY + 6):
+        for col in range(cY - PLAYER_VIEW_Y, cY + PLAYER_VIEW_Y):
             fX.append(wX[col].icon)
         fX_joined = ' '.join(fX)
         print(fX_joined)
@@ -63,6 +65,7 @@ def print_world(cZ, cX, cY):
 def show_commands():
     global commands_dict
     print(commands_dict)
+
 
 def handle_input(inp):
     global world
@@ -90,7 +93,7 @@ def handle_input(inp):
             print("Adjacent items: ")
             for item in available:
                 print(item.name)
-            chose = str(raw_input("Choose which item to grab > "))
+            chose = str(raw_input("Choose which item to grab > ")).title()
             valid = False
             for item in available:
                 if chose == item.name:
@@ -109,6 +112,7 @@ def options_get_value(choice):
 
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
+
 while True:
     print("1. Start")
     print("2. Options")
@@ -126,11 +130,15 @@ while True:
         global WORLD_Y
         global WORLDGEN_ROCK_CHANCE
         global WORLDGEN_OBJECT_CHANCE
+        global PLAYER_VIEW_X
+        global PLAYER_VIEW_Y
         print("Z-levels: " + str(WORLD_Z))
         print("X-levels: " + str(WORLD_X))
         print("Y-levels: " + str(WORLD_Y))
         print("Worldgen rock chance: " + str(WORLDGEN_ROCK_CHANCE))
         print("Worldgen object chance: " + str(WORLDGEN_OBJECT_CHANCE))
+        print("Player X view size: " + str(PLAYER_VIEW_X))
+        print("Player Y view size: " + str(PLAYER_VIEW_Y))
         editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
         try:
             if editing == "Z-Levels":
@@ -143,7 +151,12 @@ while True:
                 WORLDGEN_ROCK_CHANCE = options_get_value(editing)
             elif editing == "Worldgen Object Chance":
                 WORLDGEN_OBJECT_CHANCE = options_get_value(editing)
+            elif editing == "Player X View Size":
+                PLAYER_VIEW_X = options_get_value(editing)
+            elif editing == "Player Y View Size":
+                PLAYER_VIEW_Y = options_get_value(editing)
             else:
                 pass
         except:
             pass
+
