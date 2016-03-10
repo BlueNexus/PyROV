@@ -3,7 +3,6 @@ import blocks
 import objects
 import random
 
-
 WORLD_Z = 20
 WORLD_Y = 40
 WORLD_X = 40
@@ -11,12 +10,6 @@ WORLD_ROCK_CHANCE = 15
 WORLD_OBJECT_CHANCE = 1
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
-
-''' Everything is broken. Will fix soon
-Todo: 
-Move grabbing and dropping into world
-Unbreak all the stuff
-'''
 player = None
 
 class World:
@@ -175,10 +168,9 @@ def options_get_value(choice):
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
 
-print("1. Start")
-print("2. Options")
-
 while True:
+    print("1. Start")
+    print("2. Options")
     choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
     if choice == "Start":
         globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
@@ -224,14 +216,3 @@ while True:
                 PLAYER_VIEW_X = options_get_value(editing)
         except:
             pass
-
-
-
-'''
-    def get_view_extents(self, thing, y, x):
-        east = min(x + self.VIEW_X, len(self.world[thing.z][thing.y]) - 1)
-        west = max(x - self.VIEW_X, 0)
-        south = min(y + self.VIEW_Y, len(self.world[thing.z]) - 1)
-        north = max(y - self.VIEW_Y, 0)
-        return north, east, south, west
-'''
