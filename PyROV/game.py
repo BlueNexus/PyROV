@@ -3,6 +3,7 @@ import blocks
 import objects
 import random
 
+
 WORLD_Z = 20
 WORLD_Y = 40
 WORLD_X = 40
@@ -10,6 +11,7 @@ WORLD_ROCK_CHANCE = 15
 WORLD_OBJECT_CHANCE = 1
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
+
 player = None
 
 class World:
@@ -58,31 +60,37 @@ class World:
         self.world[self.player.z][self.player.y][self.player.x] = self.player
         print("Generation complete!")
 
+
+    def get_view_extents(self, thing, y, x):
+        east = min(self.VIEW_X, len(self.world[thing.z][thing.y]) - thing.x)
+        west = min(self.VIEW_X, len(self.world[thing.z][thing.y]) + thing.x)
+        south = 6
+        north = 6
+        return north, east, south, west
+
     def print_world(self, thing):
         cur_Z = thing.z
         cur_Y = thing.y
         cur_X = thing.x
         working = self.world[cur_Z]
-        # north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(thing, cur_Y, cur_X)
-        # for row in range(cur_Y - north_view_extent, cur_Y + south_view_extent):
-        for row in range(cur_Y - 5, cur_Y + 5):
+        north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(thing, cur_Y, cur_X)
+        for row in range(cur_Y - north_view_extent, cur_Y + south_view_extent):
             work_Y = working[row]
             final_Y = []
-            # for col in range(cur_X - west_view_extent, cur_X + east_view_extent ):
-            for col in range(cur_X - 5, cur_X + 5):
+            for col in range(cur_X - west_view_extent, cur_X + east_view_extent ):
                 final_Y.append(work_Y[col].icon)
             final_Y_joined = ' '.join(final_Y)
             print(final_Y_joined)
 
     def can_move(self, thing):
         moveable = []
-        if self.world[thing.z][thing.y][thing.x + 1].passable:
-            moveable.append(1)
-        if self.world[thing.z][thing.y + 1][thing.x].passable:
-            moveable.append(2)
-        if self.world[thing.z][thing.y][thing.x - 1].passable:
-            moveable.append(3)
         if self.world[thing.z][thing.y - 1][thing.x].passable:
+            moveable.append(1)
+        if self.world[thing.z][thing.y][thing.x - 1].passable:
+            moveable.append(2)
+        if self.world[thing.z][thing.y + 1][thing.x].passable:
+            moveable.append(3)
+        if self.world[thing.z][thing.y][thing.x + 1].passable:
             moveable.append(4)
         if self.world[thing.z + 1][thing.y][thing.x].passable:
             moveable.append(5)
@@ -104,13 +112,13 @@ class World:
         if moveable and direc in moveable:
             self.replace_with_water(thing)
             if direc == 1:
-                thing.y += 1
-            elif direc == 2:
-                thing.x += 1
-            elif direc == 3:
                 thing.y -= 1
-            elif direc == 4:
+            elif direc == 2:
                 thing.x -= 1
+            elif direc == 3:
+                thing.y += 1
+            elif direc == 4:
+                thing.x += 1
             elif direc == 5:
                 thing.z += 1
             elif direc == 6:
@@ -168,9 +176,10 @@ def options_get_value(choice):
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
 
+print("1. Start")
+print("2. Options")
+
 while True:
-    print("1. Start")
-    print("2. Options")
     choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
     if choice == "Start":
         globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
@@ -216,3 +225,7 @@ while True:
                 PLAYER_VIEW_X = options_get_value(editing)
         except:
             pass
+
+
+
+
