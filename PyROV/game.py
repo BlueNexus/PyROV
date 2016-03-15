@@ -176,10 +176,9 @@ def options_get_value(choice):
 print("PyROV: v0.14.0-Alpha")
 print("-" * 10)
 
-print("1. Start")
-print("2. Options")
-
 while True:
+    print("1. Start")
+    print("2. Options")
     choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
     if choice == "Start":
         globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
