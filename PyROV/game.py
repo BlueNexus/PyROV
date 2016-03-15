@@ -2,6 +2,7 @@ import entity
 import blocks
 import objects
 import random
+import os
 
 
 WORLD_Z = 20
@@ -162,8 +163,8 @@ class World:
             elif direc == 6:
                 thing.z -= 1
             self.sync_coords(thing)
-            # if isinstance(thing, entity.ROV):
-                # thing.power_tick(10)
+            if isinstance(thing, entity.ROV):
+                thing.power_tick(10)
         else:
             print("Thunk.")
 
@@ -181,6 +182,7 @@ class World:
 
 
     def handle_input(self, inp):
+        clear()
         if inp.startswith("Q"):
             self.step(5, player)
         elif inp.startswith("W"):
@@ -220,6 +222,9 @@ class World:
 
 def options_get_value(choice):
     return int(raw_input("Enter a value for " + str(editing) + " > "))
+
+def clear():
+    os.system('cls')
 
 while True:
     print("1. Start")
