@@ -64,8 +64,8 @@ class World:
     def get_view_extents(self, thing, y, x):
         east = min(self.VIEW_X, len(self.world[thing.z][thing.y]) - thing.x)
         west = min(self.VIEW_X, len(self.world[thing.z][thing.y]) + thing.x)
-        south = 6
-        north = 6
+        south = min(self.VIEW_Y, len(self.world[thing.z]) - thing.y)
+        north = min(self.VIEW_Y, len(self.world[thing.z]) + thing.y)
         return north, east, south, west
 
     def print_world(self, thing):
@@ -84,19 +84,49 @@ class World:
 
     def can_move(self, thing):
         moveable = []
-        if self.world[thing.z][thing.y - 1][thing.x].passable:
-            moveable.append(1)
-        if self.world[thing.z][thing.y][thing.x - 1].passable:
-            moveable.append(2)
-        if self.world[thing.z][thing.y + 1][thing.x].passable:
-            moveable.append(3)
-        if self.world[thing.z][thing.y][thing.x + 1].passable:
-            moveable.append(4)
-        if self.world[thing.z + 1][thing.y][thing.x].passable:
-            moveable.append(5)
-        if self.world[thing.z - 1][thing.y][thing.x].passable:
-            moveable.append(6)
+        try:
+            if self.world[thing.z][thing.y - 1][thing.x].passable:
+                moveable.append(1)
+        except:
+            pass
+        try:
+            if self.world[thing.z][thing.y][thing.x - 1].passable:
+                moveable.append(2)
+        except:
+            pass
+        try:
+            if self.world[thing.z][thing.y + 1][thing.x].passable:
+                moveable.append(3)
+        except:
+            pass
+        try:
+            if self.world[thing.z][thing.y][thing.x + 1].passable:
+                moveable.append(4)
+        except:
+            pass
+        try:
+            if self.world[thing.z + 1][thing.y][thing.x].passable:
+                moveable.append(5)
+        except:
+            pass
+        try:
+            if self.world[thing.z - 1][thing.y][thing.x].passable:
+                moveable.append(6)
+        except:
+            pass
         return moveable
+
+    def get_adjacent(self, thing):
+        adjacent = []
+        if self.world[thing.z][thing.y - 1][thing.x].can_grab:
+            adjacent.append(self.world[thing.z][thing.y - 1][thing.x])
+        if self.world[thing.z][thing.y][thing.x - 1].can_grab:
+            adjacent.append(self.world[thing.z][thing.y][thing.x - 1])
+        if self.world[thing.z][thing.y + 1][thing.x].can_grab:
+            adjacent.append(self.world[thing.z][thing.y + 1][thing.x])
+        if self.world[thing.z][thing.y][thing.x + 1].can_grab:
+            adjacent.append(self.world[thing.z][thing.y][thing.x + 1])
+        return adjacent
 
     def replace_with_water(self, thing):
         self.world[thing.z][thing.y][thing.x] = blocks.Water(thing.z, thing.y, thing.x)
@@ -104,12 +134,20 @@ class World:
     def sync_coords(self, thing):
         self.world[thing.z][thing.y][thing.x] = thing
 
+    def match_coords(self, child, parent):
+        self.replace_with_water(child)
+        child.z, child.y, child.x = self.get_coords(parent)
+        self.sync_coords(child)
+
+    def get_coords(self, thing):
+        return thing.z, thing.y, thing.x
+
     def place_coords(self, thing, z, y, x):
         self.world[z][y][x] = thing
 
     def step(self, direc, thing):
         moveable = self.can_move(thing)
-        if moveable and direc in moveable:
+        if moveable and direc in moveable and thing.can_move:
             self.replace_with_water(thing)
             if direc == 1:
                 thing.y -= 1
@@ -124,57 +162,64 @@ class World:
             elif direc == 6:
                 thing.z -= 1
             self.sync_coords(thing)
+            # if isinstance(thing, entity.ROV):
+                # thing.power_tick(10)
         else:
             print("Thunk.")
+
+    def grab(self, item, thing):
+        if item.can_grab:
+            self.match_coords(item, thing)
+            thing.inventory.append(item)
+            print("Picked up " + item.name)
+            thing.power_tick(5)
+        else:
+            print("It's stuck!")
 
     def show_commands(self):
         print(self.commands_dict)
 
 
     def handle_input(self, inp):
-        if inp in self.commands_list:
-            if inp == "Q":
-                self.step(5, player)
-            elif inp == "W":
-                self.step(1, player)
-            elif inp == "E":
-                self.step(6, player)
-            elif inp == "A":
-                self.step(2, player)
-            elif inp == "S":
-                self.step(3, player)
-            elif inp == "D":
-                self.step(4, player)
-            elif inp == "U":
-                player.use()
-            elif inp == "?":
-                self.show_commands()
-            elif inp == "I":
-                player.show_inventory()
-            elif inp == "G":
-                available = self.get_adjacent(player)
-                print("Adjacent items: ")
-                for item in available:
-                    print(item.name)
-                chose = str(raw_input("Choose which item to grab > "))
-                valid = False
-                for item in available:
-                    if chose == item.name:
-                        player.grab(item, self)
-                        valid = True
-                        break
-                if not valid:
-                    print("Invalid item!")
-            elif inp == "F":
-                    player.drop(self)
+        if inp.startswith("Q"):
+            self.step(5, player)
+        elif inp.startswith("W"):
+            self.step(1, player)
+        elif inp.startswith("E"):
+            self.step(6, player)
+        elif inp.startswith("A"):
+            self.step(2, player)
+        elif inp.startswith("S"):
+            self.step(3, player)
+        elif inp.startswith("D"):
+            self.step(4, player)
+        elif inp.startswith("U"):
+            player.use()
+        elif inp.startswith("?"):
+            self.show_commands()
+        elif inp.startswith("I"):
+            player.show_inventory()
+        elif inp.startswith("G"):
+            available = self.get_adjacent(player)
+            print("Adjacent items: ")
+            for item in available:
+                print(item.name)
+            chose = str(raw_input("Choose which item to grab > "))
+            valid = False
+            for item in available:
+                if chose == item.name:
+                    self.grab(item, player)
+                    valid = True
+                    break
+            if not valid:
+                print("Invalid item!")
+        elif inp.startswith("F"):
+                player.drop(self)
         else:
             print("Invalid command. Enter '?' for a list of commands.")
 
 def options_get_value(choice):
     return int(raw_input("Enter a value for " + str(editing) + " > "))
-
-print("PyROV: v0.14.0-Alpha")
-print("-" * 10)
 
 while True:
     print("1. Start")
@@ -189,7 +234,7 @@ while True:
         while True:
             globe.print_world(player)
             print("Power remaining: " + str(player.cell.power))
-            globe.handle_input(str(raw_input(">> ")).title())
+            globe.handle_input(str(raw_input(">> ")).upper())
 
     elif choice == "Options":
         global WORLD_Z
