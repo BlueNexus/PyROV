@@ -62,9 +62,9 @@ class World:
 
 
     def get_view_extents(self, thing, y, x):
-        east = min(self.VIEW_X, len(self.world[thing.z][thing.y]) - thing.x)
+        east = min(self.VIEW_X + 1, len(self.world[thing.z][thing.y]) - thing.x)
         west = min(self.VIEW_X, len(self.world[thing.z][thing.y]) + thing.x)
-        south = min(self.VIEW_Y, len(self.world[thing.z]) - thing.y)
+        south = min(self.VIEW_Y + 1, len(self.world[thing.z]) - thing.y)
         north = min(self.VIEW_Y, len(self.world[thing.z]) + thing.y)
         return north, east, south, west
 
@@ -269,7 +269,3 @@ while True:
                 PLAYER_VIEW_X = options_get_value(editing)
         except:
             pass
-
-
-
-
