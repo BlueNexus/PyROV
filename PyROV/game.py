@@ -177,6 +177,29 @@ class World:
         else:
             print("It's stuck!")
 
+    def drop(self):
+        player.show_inventory()
+        item = str(raw_input("Choose an item to drop: "))
+        for i in player.inventory:
+            if i.name == item:
+                self.match_coords(i, player)
+                avail = self.can_move(player)
+                direc = random.randint(1, 5)
+                if direc == 1:
+                    i.y -= 1
+                elif direc == 2:
+                    i.x -= 1
+                elif direc == 3:
+                    i.y += 1
+                elif direc == 4:
+                    i.x += 1
+                self.sync_coords(i)
+                player.inventory.remove(i)
+                player.power_tick(5)
+                break
+        else:
+            print("You don't have a " + item + "!")
+
     def show_commands(self):
         print(self.commands_dict)
 
@@ -216,7 +239,7 @@ class World:
             if not valid:
                 print("Invalid item!")
         elif inp.startswith("F"):
-                player.drop(self)
+                self.drop()
         else:
             print("Invalid command. Enter '?' for a list of commands.")
 
