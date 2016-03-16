@@ -4,10 +4,10 @@ class Block:
     passable = False
     can_grab = False
     
-    def __init__(self, z, x, y):
+    def __init__(self, z, y, x):
         self.z = z
-        self.x = x
         self.y = y
+        self.x = x
 
 class Water(Block):
     name = "Water"
