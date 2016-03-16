@@ -3,21 +3,23 @@ class Object:
     icon = "*"
     can_grab = True
     passable = True
+    useable = False
 
-    def __init__(self, x, y, z):
+    def __init__(self, z, y, x):
         self.z = z
-        self.x = x
         self.y = y
+        self.x = x
 
 class Cell(Object):
     name = "Cell"
     icon = "="
     total_power = 1000
+    useable = True
     
-    def __init__(self, x, y, z):
+    def __init__(self, z, y, x):
         self.z = z
-        self.x = x
         self.y = y
+        self.x = x
         self.power = self.total_power
 
 class CellBasic(Cell):
@@ -32,6 +34,6 @@ class CellLarge(Cell):
     total_power = 4000
 
 class CellXL(Cell):
-    name = "PC-16K Battery"
+    name = "PB-16K Battery"
     total_power = 16000
     
