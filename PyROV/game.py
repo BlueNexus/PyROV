@@ -9,9 +9,10 @@ WORLD_Z = 20
 WORLD_Y = 40
 WORLD_X = 40
 WORLD_ROCK_CHANCE = 15
-WORLD_OBJECT_CHANCE = 1
+WORLD_OBJECT_CHANCE = 0.05
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
+DEBUG = True
 
 player = None
 
@@ -25,7 +26,7 @@ class World:
 
     world = []
 
-    def __init__(self, Z, Y, X, rock, obj, vY, vX):
+    def __init__(self, Z, Y, X, rock, obj, vY, vX, de):
         self.WORLD_Z = Z
         self.WORLD_Y = Y
         self.WORLD_X = X
@@ -33,6 +34,7 @@ class World:
         self.OBJECT_CHANCE = obj
         self.VIEW_Y = vY
         self.VIEW_X = vX
+        self.DEBUG = de
         self.make_world(Z, Y, X)
 
     def make_world(self, z, y, x):
@@ -48,7 +50,15 @@ class World:
                     elif rand > self.OBJECT_CHANCE:
                         wX = blocks.Rock(plane, col, row)
                     else:
-                        wX = objects.Object(plane, col, row)
+                        cell_type = random.random()
+                        if cell_type > 0.4:
+                            wX = objects.CellBasic(plane, col, row)
+                        elif cell_type > 0.2:
+                            wX = objects.CellMedium(plane, col, row)
+                        elif cell_type > 0.1:
+                            wX = objects.CellLarge(plane, col, row)
+                        else:
+                            wX = objects.CellXL(plane, col, row)
                     wY.append(wX)
                 wZ.append(wY)
             working.append(wZ)
@@ -59,8 +69,16 @@ class World:
         start_x = x / 2
         self.player = entity.ROV(start_z, start_y, start_x)
         self.world[self.player.z][self.player.y][self.player.x] = self.player
+        if self.DEBUG:
+            self.debug_world_sync()
         print("Generation complete!")
 
+    def debug_world_sync(self):
+        for plane in self.world:
+            for col in plane:
+                for row in col:
+                    for thing in row:
+                        self.sync_coords(thing)
 
     def get_view_extents(self, thing, y, x):
         east = min(self.VIEW_X + 1, len(self.world[thing.z][thing.y]) - thing.x)
@@ -164,16 +182,17 @@ class World:
                 thing.z -= 1
             self.sync_coords(thing)
             if isinstance(thing, entity.ROV):
-                thing.power_tick(10)
+                thing.power_tick(20)
         else:
             print("Thunk.")
 
     def grab(self, item, thing):
-        if item.can_grab:
+        if item.can_grab and thing.check_inventory(item):
             self.match_coords(item, thing)
             thing.inventory.append(item)
+            thing.refresh_inventory()
             print("Picked up " + item.name)
-            thing.power_tick(5)
+            thing.power_tick(10)
         else:
             print("It's stuck!")
 
@@ -195,7 +214,8 @@ class World:
                     i.x += 1
                 self.sync_coords(i)
                 player.inventory.remove(i)
-                player.power_tick(5)
+                player.refresh_inventory()
+                player.power_tick(10)
                 break
         else:
             print("You don't have a " + item + "!")
@@ -203,9 +223,16 @@ class World:
     def show_commands(self):
         print(self.commands_dict)
 
+    def print_hud(self, thing):
+        if thing.cell.power < 100:
+            print("Power remaining: " + str(thing.cell.power) + " - WARNING!")
+        else:
+            print("Power remaining: " + str(thing.cell.power))
+        print("Inventory: V" + str(thing.inventory_vol) + "/W" + str(thing.inventory_weight))
+
 
     def handle_input(self, inp):
-        clear()
+        # clear()
         if inp.startswith("Q"):
             self.step(5, player)
         elif inp.startswith("W"):
@@ -256,12 +283,12 @@ while True:
     if choice == "Start":
         globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
                         WORLD_OBJECT_CHANCE, PLAYER_VIEW_Y,
-                        PLAYER_VIEW_X)
+                        PLAYER_VIEW_X, DEBUG)
         global player
         player = globe.player
         while True:
             globe.print_world(player)
-            print("Power remaining: " + str(player.cell.power))
+            globe.print_hud(player)
             globe.handle_input(str(raw_input(">> ")).upper())
 
     elif choice == "Options":
