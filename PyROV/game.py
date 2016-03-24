@@ -3,6 +3,7 @@ import blocks
 import objects
 import random
 import os
+import logging
 
 
 WORLD_Z = 20
@@ -13,8 +14,9 @@ WORLD_OBJECT_CHANCE = 0.05
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
 DEBUG = True
-
 player = None
+
+logging.basicConfig(level=logging.ERROR, filename='/log/errorlog.log')
 
 class World:
     
@@ -276,51 +278,59 @@ def options_get_value(choice):
 def clear():
     os.system('cls')
 
-while True:
-    print("1. Start")
-    print("2. Options")
-    choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
-    if choice == "Start":
-        globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
-                        WORLD_OBJECT_CHANCE, PLAYER_VIEW_Y,
-                        PLAYER_VIEW_X, DEBUG)
-        global player
-        player = globe.player
-        while True:
-            globe.print_world(player)
-            globe.print_hud(player)
-            globe.handle_input(str(raw_input(">> ")).upper())
+def main():
+    while True:
+        print("1. Start")
+        print("2. Options")
+        choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
+        if choice == "Start":
+            globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
+                            WORLD_OBJECT_CHANCE, PLAYER_VIEW_Y,
+                            PLAYER_VIEW_X, DEBUG)
+            global player
+            player = globe.player
+            while True:
+                globe.print_world(player)
+                globe.print_hud(player)
+                globe.handle_input(str(raw_input(">> ")).upper())
 
-    elif choice == "Options":
-        global WORLD_Z
-        global WORLD_Y
-        global WORLD_X
-        global WORLD_ROCK_CHANCE
-        global WORLD_OBJECT_CHANCE
-        global PLAYER_VIEW_Y
-        global PLAYER_VIEW_X
-        print("Z-levels: " + str(WORLD_Z))
-        print("Y-levels: " + str(WORLD_Y))
-        print("X-levels: " + str(WORLD_X))
-        print("Worldgen rock chance: " + str(WORLD_ROCK_CHANCE))
-        print("Worldgen object chance: " + str(WORLD_OBJECT_CHANCE))
-        print("Player Y view size: " + str(PLAYER_VIEW_Y))
-        print("Player X view size: " + str(PLAYER_VIEW_X))
-        editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
-        try:
-            if editing == "Z-Levels":
-                WORLD_Z = options_get_value(editing)
-            elif editing == "Y-Levels":
-                WORLD_Y = options_get_value(editing)
-            elif editing == "X-Levels":
-                WORLD_X = options_get_value(editing)
-            elif editing == "Worldgen Rock Chance":
-                WORLD_ROCK_CHANCE = options_get_value(editing)
-            elif editing == "Worldgen Object Chance":
-                WORLD_OBJECT_CHANCE = options_get_value(editing)
-            elif editing == "Player Y View Size":
-                PLAYER_VIEW_Y = options_get_value(editing)
-            elif editing == "Player X View Size":
-                PLAYER_VIEW_X = options_get_value(editing)
-        except:
-            pass
+        elif choice == "Options":
+            global WORLD_Z
+            global WORLD_Y
+            global WORLD_X
+            global WORLD_ROCK_CHANCE
+            global WORLD_OBJECT_CHANCE
+            global PLAYER_VIEW_Y
+            global PLAYER_VIEW_X
+            print("Z-levels: " + str(WORLD_Z))
+            print("Y-levels: " + str(WORLD_Y))
+            print("X-levels: " + str(WORLD_X))
+            print("Worldgen rock chance: " + str(WORLD_ROCK_CHANCE))
+            print("Worldgen object chance: " + str(WORLD_OBJECT_CHANCE))
+            print("Player Y view size: " + str(PLAYER_VIEW_Y))
+            print("Player X view size: " + str(PLAYER_VIEW_X))
+            editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
+            try:
+                if editing == "Z-Levels":
+                    WORLD_Z = options_get_value(editing)
+                elif editing == "Y-Levels":
+                    WORLD_Y = options_get_value(editing)
+                elif editing == "X-Levels":
+                    WORLD_X = options_get_value(editing)
+                elif editing == "Worldgen Rock Chance":
+                    WORLD_ROCK_CHANCE = options_get_value(editing)
+                elif editing == "Worldgen Object Chance":
+                    WORLD_OBJECT_CHANCE = options_get_value(editing)
+                elif editing == "Player Y View Size":
+                    PLAYER_VIEW_Y = options_get_value(editing)
+               elif editing == "Player X View Size":
+                   PLAYER_VIEW_X = options_get_value(editing)
+            except:
+                pass
+
+while True:
+    try:
+        main()
+    except:
+        logging.exception("Exception")
+    
