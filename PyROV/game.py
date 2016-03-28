@@ -16,7 +16,7 @@ PLAYER_VIEW_X = 6
 DEBUG = True
 player = None
 
-logging.basicConfig(level=logging.ERROR, filename='/log/errorlog.log')
+logging.basicConfig(level=logging.ERROR, filename='log/errorlog.log')
 
 class World:
     
@@ -79,8 +79,7 @@ class World:
         for plane in self.world:
             for col in plane:
                 for row in col:
-                    for thing in row:
-                        self.sync_coords(thing)
+                    self.sync_coords(row)
 
     def get_view_extents(self, thing, y, x):
         east = min(self.VIEW_X + 1, len(self.world[thing.z][thing.y]) - thing.x)
@@ -323,8 +322,8 @@ def main():
                     WORLD_OBJECT_CHANCE = options_get_value(editing)
                 elif editing == "Player Y View Size":
                     PLAYER_VIEW_Y = options_get_value(editing)
-               elif editing == "Player X View Size":
-                   PLAYER_VIEW_X = options_get_value(editing)
+                elif editing == "Player X View Size":
+                    PLAYER_VIEW_X = options_get_value(editing)
             except:
                 pass
 
@@ -332,5 +331,5 @@ while True:
     try:
         main()
     except:
+        print("Fatal Error. Returning to menu...")
         logging.exception("Exception")
-    
