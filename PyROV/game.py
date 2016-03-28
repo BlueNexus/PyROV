@@ -278,6 +278,15 @@ def clear():
     os.system('cls')
 
 def main():
+    global WORLD_Z
+    global WORLD_Y
+    global WORLD_X
+    global WORLD_ROCK_CHANCE
+    global WORLD_OBJECT_CHANCE
+    global PLAYER_VIEW_Y
+    global PLAYER_VIEW_X
+    global DEBUG
+    global player
     while True:
         print("1. Start")
         print("2. Options")
@@ -286,7 +295,7 @@ def main():
             globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
                             WORLD_OBJECT_CHANCE, PLAYER_VIEW_Y,
                             PLAYER_VIEW_X, DEBUG)
-            global player
+
             player = globe.player
             while True:
                 globe.print_world(player)
@@ -294,13 +303,6 @@ def main():
                 globe.handle_input(str(raw_input(">> ")).upper())
 
         elif choice == "Options":
-            global WORLD_Z
-            global WORLD_Y
-            global WORLD_X
-            global WORLD_ROCK_CHANCE
-            global WORLD_OBJECT_CHANCE
-            global PLAYER_VIEW_Y
-            global PLAYER_VIEW_X
             print("Z-levels: " + str(WORLD_Z))
             print("Y-levels: " + str(WORLD_Y))
             print("X-levels: " + str(WORLD_X))
