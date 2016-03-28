@@ -12,6 +12,9 @@ class Object:
         self.y = y
         self.x = x
 
+    def act(self):
+        pass
+
 class Cell(Object):
     name = "Cell"
     icon = "="
@@ -21,12 +24,17 @@ class Cell(Object):
         self.z = z
         self.y = y
         self.x = x
-        self.power = self.total_power
+        self.float_power = float(self.total_power)
+        self.power = self.float_power
 
     def activate(self, user):
         user.inventory.append(user.cell)
         user.cell = self
         user.inventory.remove(self)
+        user.refresh_inventory()
+
+    def get_percentage(self):
+        return(int(((self.power / self.float_power) * 100)))
 
 class CellBasic(Cell):
     name = "PC-Lite Cell"
@@ -50,4 +58,3 @@ class CellXL(Cell):
     total_power = 16000
     vol = 30
     weight = 50
-    
