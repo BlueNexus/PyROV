@@ -225,12 +225,11 @@ class World:
         print(self.commands_dict)
 
     def print_hud(self, thing):
-        if thing.cell.power < 100:
-            print("Power remaining: " + str(thing.cell.power) + " - WARNING!")
-        else:
-            print("Power remaining: " + str(thing.cell.power))
+        perc = thing.cell.get_percentage()
+        count = perc / 10
+        print("Power: <" + ("=" * count) + (" " * (10 - count)) + ">")
+        print("Z: " + str(thing.z) + " Y: " + str(thing.y) + " X: " + str(thing.x))
         print("Inventory: V" + str(thing.inventory_vol) + "/W" + str(thing.inventory_weight))
-
 
     def handle_input(self, inp):
         # clear()
@@ -267,9 +266,10 @@ class World:
             if not valid:
                 print("Invalid item!")
         elif inp.startswith("F"):
-                self.drop()
+            self.drop()
         else:
             print("Invalid command. Enter '?' for a list of commands.")
+        #self.tick()
 
 def options_get_value(choice):
     return int(raw_input("Enter a value for " + str(editing) + " > "))
