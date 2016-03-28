@@ -9,6 +9,9 @@ class Block:
         self.y = y
         self.x = x
 
+    def act(self):
+        pass
+
 class Water(Block):
     name = "Water"
     icon = "."
