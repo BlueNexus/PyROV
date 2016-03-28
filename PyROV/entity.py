@@ -25,6 +25,9 @@ class Entity:
     def get_coords(self):
         return self.z, self.y, self.x
 
+    def act(self):
+        pass
+
 class ROV(Entity):
     name = "ROV"
     icon = "@"
