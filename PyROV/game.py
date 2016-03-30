@@ -9,8 +9,6 @@ import logging
 WORLD_Z = 20
 WORLD_Y = 40
 WORLD_X = 40
-WORLD_ROCK_CHANCE = 15
-WORLD_OBJECT_CHANCE = 0.05
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
 DEBUG = True
@@ -40,30 +38,7 @@ class World:
         self.make_world(Z, Y, X)
 
     def make_world(self, z, y, x):
-        working = []
-        for plane in range(z):
-            wZ = []
-            for row in range(y):
-                wY = []
-                for col in range(x):
-                    rand = random.randint(0, 100)
-                    if rand > self.ROCK_CHANCE:
-                        wX = blocks.Water(plane, col, row)
-                    elif rand > self.OBJECT_CHANCE:
-                        wX = blocks.Rock(plane, col, row)
-                    else:
-                        cell_type = random.random()
-                        if cell_type > 0.4:
-                            wX = objects.CellBasic(plane, col, row)
-                        elif cell_type > 0.2:
-                            wX = objects.CellMedium(plane, col, row)
-                        elif cell_type > 0.1:
-                            wX = objects.CellLarge(plane, col, row)
-                        else:
-                            wX = objects.CellXL(plane, col, row)
-                    wY.append(wX)
-                wZ.append(wY)
-            working.append(wZ)
+        working = self.generate_world(z, y, x)
         self.world = working
         print("Creating the player...")
         start_z = z / 2
@@ -74,6 +49,55 @@ class World:
         if self.DEBUG:
             self.debug_world_sync()
         print("Generation complete!")
+
+    def generate_world(self, z, y, x):
+        world = self.worldgen_stage_1(z, y, x)
+        world = self.worldgen_stage_2(world)
+        return world
+
+    def worldgen_stage_1(self, z, y, x):
+        print("Worldgen: Generating base world")
+        work = []
+        for plane in range(z):
+            wZ = []
+            for row in range(y):
+                wY = []
+                for col in range(x):
+                    if plane == 0:
+                        wX = blocks.Rock(plane, row, col)
+                    else:
+                        wX = blocks.Water(plane, row, col)
+                    wY.append(wX)
+                wZ.append(wY)
+            work.append(wZ)
+        print("Worldgen: Base world generation complete")
+        return work
+
+    def worldgen_stage_2(self, base):
+        print("Worldgen: Generating terrain")
+        for plane in range(len(base)):
+            for row in range(plane):
+                for col in range(row):
+                    if plane != 0:
+                        rand = random.randint(0, 100)
+                        if self.can_support(plane, row, col, base):
+                            if rand > 50:
+                                base[plane][row][col] = blocks.Rock(plane, row, col)
+        print("Worldgen: Terrain generation complete")
+        return base
+
+    def can_support(self, plane, row, col, base):
+        if base[plane - 1][row][col] is type(blocks.Rock):
+            supporting = [base[plane - 1][row - 1][col], base[plane - 1]\
+                          [row + 1][col], base[plane - 1][row][col - 1], \
+                          base[plane - 1][row][col + 1]]
+            valid = True
+            for block in supporting:
+                if block is not type(blocks.Rock):
+                    valid = False
+            return valid
+        else:
+            return False
 
     def debug_world_sync(self):
         for plane in self.world:
