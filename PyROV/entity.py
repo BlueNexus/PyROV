@@ -28,6 +28,9 @@ class Entity:
     def act(self):
         pass
 
+    def __repr__(self):
+        return(self.icon)
+
 class ROV(Entity):
     name = "ROV"
     icon = "@"
@@ -69,7 +72,7 @@ class ROV(Entity):
     def show_inventory(self):
         print("Items in inventory: ")
         for i in self.inventory:
-            print(i.name)
+            print(i.icon + " " + i.name)
 
     def use(self):
         self.show_inventory()
