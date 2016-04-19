@@ -6,9 +6,9 @@ import os
 import logging
 
 
-WORLD_Z = 20
-WORLD_Y = 40
-WORLD_X = 40
+WORLD_Z = 10
+WORLD_Y = 20
+WORLD_X = 20
 PLAYER_VIEW_Y = 6
 PLAYER_VIEW_X = 6
 DEBUG = True
@@ -24,14 +24,10 @@ class World:
             "G": "Grab", "F": "Drop"}
     commands_list = ["Q", "W", "E", "A", "S", "D", "U", "?", "I", "G", "F"]
 
-    world = []
-
-    def __init__(self, Z, Y, X, rock, obj, vY, vX, de):
+    def __init__(self, Z, Y, X, vY, vX, de):
         self.WORLD_Z = Z
         self.WORLD_Y = Y
         self.WORLD_X = X
-        self.ROCK_CHANCE = rock
-        self.OBJECT_CHANCE = obj
         self.VIEW_Y = vY
         self.VIEW_X = vX
         self.DEBUG = de
@@ -42,8 +38,8 @@ class World:
         self.world = working
         print("Creating the player...")
         start_z = z / 2
-        start_y = y / 2
-        start_x = x / 2
+        start_y = 0
+        start_x = 0
         self.player = entity.ROV(start_z, start_y, start_x)
         self.world[self.player.z][self.player.y][self.player.x] = self.player
         if self.DEBUG:
@@ -87,13 +83,14 @@ class World:
         return base
 
     def can_support(self, plane, row, col, base):
-        if base[plane - 1][row][col] is type(blocks.Rock):
+        checking = base[plane - 1][row][col]
+        if isinstance(checking, blocks.Rock):
             supporting = [base[plane - 1][row - 1][col], base[plane - 1]\
                           [row + 1][col], base[plane - 1][row][col - 1], \
                           base[plane - 1][row][col + 1]]
             valid = True
             for block in supporting:
-                if block is not type(blocks.Rock):
+                if not isinstance(block, blocks.Rock):
                     valid = False
             return valid
         else:
@@ -122,7 +119,7 @@ class World:
             work_Y = working[row]
             final_Y = []
             for col in range(cur_X - west_view_extent, cur_X + east_view_extent ):
-                final_Y.append(work_Y[col].icon)
+                final_Y.append(str(work_Y[col]))
             final_Y_joined = ' '.join(final_Y)
             print(final_Y_joined)
 
@@ -305,8 +302,6 @@ def main():
     global WORLD_Z
     global WORLD_Y
     global WORLD_X
-    global WORLD_ROCK_CHANCE
-    global WORLD_OBJECT_CHANCE
     global PLAYER_VIEW_Y
     global PLAYER_VIEW_X
     global DEBUG
@@ -316,8 +311,7 @@ def main():
         print("2. Options")
         choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
         if choice == "Start":
-            globe = World(WORLD_Z, WORLD_Y, WORLD_X, WORLD_ROCK_CHANCE,
-                            WORLD_OBJECT_CHANCE, PLAYER_VIEW_Y,
+            globe = World(WORLD_Z, WORLD_Y, WORLD_X, PLAYER_VIEW_Y,
                             PLAYER_VIEW_X, DEBUG)
 
             player = globe.player
@@ -330,8 +324,6 @@ def main():
             print("Z-levels: " + str(WORLD_Z))
             print("Y-levels: " + str(WORLD_Y))
             print("X-levels: " + str(WORLD_X))
-            print("Worldgen rock chance: " + str(WORLD_ROCK_CHANCE))
-            print("Worldgen object chance: " + str(WORLD_OBJECT_CHANCE))
             print("Player Y view size: " + str(PLAYER_VIEW_Y))
             print("Player X view size: " + str(PLAYER_VIEW_X))
             editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
@@ -342,10 +334,6 @@ def main():
                     WORLD_Y = options_get_value(editing)
                 elif editing == "X-Levels":
                     WORLD_X = options_get_value(editing)
-                elif editing == "Worldgen Rock Chance":
-                    WORLD_ROCK_CHANCE = options_get_value(editing)
-                elif editing == "Worldgen Object Chance":
-                    WORLD_OBJECT_CHANCE = options_get_value(editing)
                 elif editing == "Player Y View Size":
                     PLAYER_VIEW_Y = options_get_value(editing)
                 elif editing == "Player X View Size":
