@@ -12,6 +12,9 @@ class Block:
     def act(self):
         pass
 
+    def __repr__(self):
+        return(self.icon)
+
 class Water(Block):
     name = "Water"
     icon = "."
