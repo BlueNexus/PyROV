@@ -72,7 +72,7 @@ class ROV(Entity):
     def show_inventory(self):
         print("Items in inventory: ")
         for i in self.inventory:
-            print(i.icon + " " + i.name)
+            print(i + " " + i.name)
 
     def use(self):
         self.show_inventory()
