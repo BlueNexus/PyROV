@@ -108,7 +108,7 @@ class World:
                 for row in col:
                     self.sync_coords(row)
 
-    def get_view_extents(self, thing, y, x):
+    def get_view_extents(self, thing):
         east = min(self.VIEW_X + 1, len(self.world[thing.z][thing.y]) - thing.x)
         west = min(self.VIEW_X, len(self.world[thing.z][thing.y]) + thing.x)
         south = min(self.VIEW_Y + 1, len(self.world[thing.z]) - thing.y)
@@ -298,7 +298,7 @@ class World:
             print("Invalid command. Enter '?' for a list of commands.")
         #self.tick()
 
-def options_get_value(choice):
+def options_get_value():
     return int(raw_input("Enter a value for " + str(editing) + " > "))
 
 def clear():
@@ -335,15 +335,15 @@ def main():
             editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
             try:
                 if editing == "Z-Levels":
-                    WORLD_Z = options_get_value(editing)
+                    WORLD_Z = options_get_value()
                 elif editing == "Y-Levels":
-                    WORLD_Y = options_get_value(editing)
+                    WORLD_Y = options_get_value()
                 elif editing == "X-Levels":
-                    WORLD_X = options_get_value(editing)
+                    WORLD_X = options_get_value()
                 elif editing == "Player Y View Size":
-                    PLAYER_VIEW_Y = options_get_value(editing)
+                    PLAYER_VIEW_Y = options_get_value()
                 elif editing == "Player X View Size":
-                    PLAYER_VIEW_X = options_get_value(editing)
+                    PLAYER_VIEW_X = options_get_value()
             except:
                 pass
 
