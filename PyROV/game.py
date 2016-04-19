@@ -74,25 +74,25 @@ class World:
         for plane_no, plane in enumerate(base):
             for row_no, row in enumerate(plane):
                 for col_no, col in enumerate(row):
-                    if plane != 0:
+                    if plane_no != 0:
                         rand = random.randint(0, 100)
-                        if self.can_support(plane_no, plane, row_no, row, col_no, col, base):
+                        if self.can_support(plane_no, row_no, col_no, base):
                             if rand > 50:
                                 base[plane_no][row_no][col_no] = blocks.Rock(plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
 
-    def can_support(self, plane_no, plane, row_no, row, col_no, col, base):
+    def can_support(self, plane_no, row_no, col_no, base):
         checking = base[plane_no - 1][row_no][col_no]
         if isinstance(checking, blocks.Rock):
             to_check = []
-            if row_no != 0 - len(plane):
+            if row_no != 0:
                 to_check.append(base[plane_no - 1][row_no - 1][col_no])
-            if row_no != (len(plane) / 2):
+            if row_no != (self.WORLD_Y * 2):
                 to_check.append(base[plane_no - 1][row_no + 1][col_no])
-            if col_no != 0 - len(row):
+            if col_no != 0:
                 to_check.append(base[plane_no - 1][row_no][col_no - 1])
-            if col_no != (len(row) / 2):
+            if col_no != (self.WORLD_X * 2):
                 to_check.append(base[plane_no - 1][row_no][col_no + 1])
             valid = True
             for block in to_check:
