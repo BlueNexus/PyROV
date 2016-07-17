@@ -33,7 +33,6 @@ class Entity:
     def __repr__(self):
         return(self.icon)
 
-
 class ROV(Entity):
     name = "ROV"
     icon = "@"
@@ -61,9 +60,7 @@ class ROV(Entity):
             self.inventory_weight += item.weight
 
     def check_inventory(self, item):
-        if (self.inventory_vol +
-            item.vol) <= 100 and (self.inventory_weight +
-                                  item.weight) <= 50:
+        if (self.inventory_vol + item.vol) <= 100 and (self.inventory_weight + item.weight) <= 50:
             return True
         else:
             print("You've got too much in your inventory!")
