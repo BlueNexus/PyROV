@@ -37,7 +37,7 @@ class World:
         working = self.generate_world(z, y, x)
         self.world = working
         print("Creating the player...")
-        start_z = z / 2
+        start_z = int(z / 2)
         start_y = 0
         start_x = 0
         self.player = entity.ROV(start_z, start_y, start_x)
@@ -77,7 +77,7 @@ class World:
                     if plane_no != 0:
                         rand = random.randint(0, 100)
                         if self.can_support(plane_no, row_no, col_no, base):
-                            if rand > 50:
+                            if rand > 25:
                                 base[plane_no][row_no][col_no] = blocks.Rock(plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
@@ -85,19 +85,22 @@ class World:
     def can_support(self, plane_no, row_no, col_no, base):
         checking = base[plane_no - 1][row_no][col_no]
         if isinstance(checking, blocks.Rock):
-            to_check = []
-            if row_no != 0:
-                to_check.append(base[plane_no - 1][row_no - 1][col_no])
-            if row_no != (self.WORLD_Y * 2):
-                to_check.append(base[plane_no - 1][row_no + 1][col_no])
-            if col_no != 0:
-                to_check.append(base[plane_no - 1][row_no][col_no - 1])
-            if col_no != (self.WORLD_X * 2):
-                to_check.append(base[plane_no - 1][row_no][col_no + 1])
-            valid = True
-            for block in to_check:
-                if not isinstance(block, blocks.Rock):
-                    valid = False
+            try:
+                to_check = []
+                if row_no != 0:
+                    to_check.append(base[plane_no - 1][row_no - 1][col_no])
+                if row_no != (self.WORLD_Y * 2):
+                    to_check.append(base[plane_no - 1][row_no + 1][col_no])
+                if col_no != 0:
+                    to_check.append(base[plane_no - 1][row_no][col_no - 1])
+                if col_no != (self.WORLD_X * 2):
+                    to_check.append(base[plane_no - 1][row_no][col_no + 1])
+                valid = True
+                for block in to_check:
+                    if not isinstance(block, blocks.Rock):
+                        valid = False
+            except:
+                valid = False
             return valid
         else:
             return False
@@ -120,7 +123,7 @@ class World:
         cur_Y = thing.y
         cur_X = thing.x
         working = self.world[cur_Z]
-        north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(thing, cur_Y, cur_X)
+        north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(thing)
         for row in range(cur_Y - north_view_extent, cur_Y + south_view_extent):
             work_Y = working[row]
             final_Y = []
@@ -226,7 +229,7 @@ class World:
 
     def drop(self):
         player.show_inventory()
-        item = str(raw_input("Choose an item to drop: "))
+        item = str(input("Choose an item to drop: "))
         for i in player.inventory:
             if i.name == item:
                 self.match_coords(i, player)
@@ -253,7 +256,7 @@ class World:
 
     def print_hud(self, thing):
         perc = thing.cell.get_percentage()
-        count = perc / 10
+        count = int(perc / 10)
         print("Power: <" + ("=" * count) + (" " * (10 - count)) + ">")
         print("Z: " + str(thing.z) + " Y: " + str(thing.y) + " X: " + str(thing.x))
         print("Inventory: V" + str(thing.inventory_vol) + "/W" + str(thing.inventory_weight))
@@ -283,7 +286,7 @@ class World:
             print("Adjacent items: ")
             for item in available:
                 print(item.name)
-            chose = str(raw_input("Choose which item to grab > "))
+            chose = str(input("Choose which item to grab > "))
             valid = False
             for item in available:
                 if chose == item.name:
@@ -299,7 +302,7 @@ class World:
         #self.tick()
 
 def options_get_value():
-    return int(raw_input("Enter a value for " + str(editing) + " > "))
+    return int(input("Enter a value for " + str(editing) + " > "))
 
 def clear():
     os.system('cls')
@@ -315,7 +318,7 @@ def main():
     while True:
         print("1. Start")
         print("2. Options")
-        choice = str(raw_input("Enter your choice (Start/Options) > ")).title()
+        choice = str(input("Enter your choice (Start/Options) > ")).title()
         if choice == "Start":
             globe = World(WORLD_Z, WORLD_Y, WORLD_X, PLAYER_VIEW_Y,
                             PLAYER_VIEW_X, DEBUG)
@@ -324,7 +327,7 @@ def main():
             while True:
                 globe.print_world(player)
                 globe.print_hud(player)
-                globe.handle_input(str(raw_input(">> ")).upper())
+                globe.handle_input(str(input(">> ")).upper())
 
         elif choice == "Options":
             print("Z-levels: " + str(WORLD_Z))
@@ -332,7 +335,7 @@ def main():
             print("X-levels: " + str(WORLD_X))
             print("Player Y view size: " + str(PLAYER_VIEW_Y))
             print("Player X view size: " + str(PLAYER_VIEW_X))
-            editing = str(raw_input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
+            editing = str(input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
             try:
                 if editing == "Z-Levels":
                     WORLD_Z = options_get_value()
