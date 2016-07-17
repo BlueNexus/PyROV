@@ -77,7 +77,7 @@ class World:
                     if plane_no != 0:
                         rand = random.randint(0, 100)
                         if self.can_support(plane_no, row_no, col_no, base):
-                            if rand > 25:
+                            if rand > 10:
                                 base[plane_no][row_no][col_no] = blocks.Rock(plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
