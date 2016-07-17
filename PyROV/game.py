@@ -16,21 +16,12 @@ player = None
 
 logging.basicConfig(level=logging.ERROR, filename='log/errorlog.log')
 
-
 class World:
-
-    commands_dict = {
-        "Q": "Move up",
-        "W": "Move forward",
-        "E": "Move down",
-        "A": "Move left",
-        "S": "Move back",
-        "D": "Move right",
-        "U": "Use item",
-        "?": "Show commands",
-        "I": "Show inventory",
-        "G": "Grab",
-        "F": "Drop"}
+    
+    commands_dict = {"Q": "Move up", "W": "Move forward", "E": "Move down",
+            "A": "Move left", "S": "Move back", "D": "Move right",
+            "U": "Use item", "?": "Show commands", "I": "Show inventory",
+            "G": "Grab", "F": "Drop"}
     commands_list = ["Q", "W", "E", "A", "S", "D", "U", "?", "I", "G", "F"]
 
     def __init__(self, Z, Y, X, vY, vX, de):
@@ -88,8 +79,7 @@ class World:
                         rand = random.randint(0, 100)
                         if self.can_support(plane_no, row_no, col_no, base):
                             if rand > 10:
-                                self.gen_create(
-                                    blocks.Rock, base, plane_no, row_no, col_no)
+                                self.gen_create(blocks.Rock, base, plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
 
@@ -99,13 +89,8 @@ class World:
             for row_no, row in enumerate(plane):
                 for col_no, col in enumerate(row):
                     rand = random.randint(0, 100)
-                    if isinstance(
-                            base[
-                                plane_no -
-                                1][row_no][col_no],
-                            blocks.Rock) and rand > 95:
-                        self.gen_create(
-                            objects.Cell, base, plane_no, row_no, col_no)
+                    if isinstance(base[plane_no - 1][row_no][col_no], blocks.Rock) and rand > 95:
+                        self.gen_create(objects.Cell, base, plane_no, row_no, col_no)
         print("Worldgen: Items placed")
         return base
 
@@ -147,8 +132,7 @@ class World:
                     self.sync_coords(row)
 
     def get_view_extents(self, thing):
-        east = min(self.VIEW_X + 1,
-                   len(self.world[thing.z][thing.y]) - thing.x)
+        east = min(self.VIEW_X + 1, len(self.world[thing.z][thing.y]) - thing.x)
         west = min(self.VIEW_X, len(self.world[thing.z][thing.y]) + thing.x)
         south = min(self.VIEW_Y + 1, len(self.world[thing.z]) - thing.y)
         north = min(self.VIEW_Y, len(self.world[thing.z]) + thing.y)
@@ -159,14 +143,11 @@ class World:
         cur_Y = thing.y
         cur_X = thing.x
         working = self.world[cur_Z]
-        north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(
-            thing)
+        north_view_extent, east_view_extent, south_view_extent, west_view_extent = self.get_view_extents(thing)
         for row in range(cur_Y - north_view_extent, cur_Y + south_view_extent):
             work_Y = working[row]
             final_Y = []
-            for col in range(
-                    cur_X - west_view_extent,
-                    cur_X + east_view_extent):
+            for col in range(cur_X - west_view_extent, cur_X + east_view_extent ):
                 final_Y.append(str(work_Y[col]))
             final_Y_joined = ' '.join(final_Y)
             print(final_Y_joined)
@@ -218,13 +199,7 @@ class World:
         return adjacent
 
     def replace_with_water(self, thing):
-        self.world[
-            thing.z][
-            thing.y][
-            thing.x] = blocks.Water(
-                thing.z,
-                thing.y,
-            thing.x)
+        self.world[thing.z][thing.y][thing.x] = blocks.Water(thing.z, thing.y, thing.x)
 
     def sync_coords(self, thing):
         self.world[thing.z][thing.y][thing.x] = thing
@@ -303,10 +278,8 @@ class World:
         perc = thing.cell.get_percentage()
         count = int(perc / 10)
         print("Power: <" + ("=" * count) + (" " * (10 - count)) + ">")
-        print("Z: " + str(thing.z) + " Y: " +
-              str(thing.y) + " X: " + str(thing.x))
-        print("Inventory: V" + str(thing.inventory_vol) +
-              "/W" + str(thing.inventory_weight))
+        print("Z: " + str(thing.z) + " Y: " + str(thing.y) + " X: " + str(thing.x))
+        print("Inventory: V" + str(thing.inventory_vol) + "/W" + str(thing.inventory_weight))
 
     def handle_input(self, inp):
         clear()
@@ -346,16 +319,13 @@ class World:
             self.drop()
         else:
             print("Invalid command. Enter '?' for a list of commands.")
-        # self.tick()
-
+        #self.tick()
 
 def options_get_value():
     return int(input("Enter a value for " + str(editing) + " > "))
 
-
 def clear():
     os.system('cls')
-
 
 def main():
     global WORLD_Z
@@ -371,7 +341,7 @@ def main():
         choice = str(input("Enter your choice (Start/Options) > ")).title()
         if choice == "Start":
             globe = World(WORLD_Z, WORLD_Y, WORLD_X, PLAYER_VIEW_Y,
-                          PLAYER_VIEW_X, DEBUG)
+                            PLAYER_VIEW_X, DEBUG)
 
             player = globe.player
             while True:
@@ -385,8 +355,7 @@ def main():
             print("X-levels: " + str(WORLD_X))
             print("Player Y view size: " + str(PLAYER_VIEW_Y))
             print("Player X view size: " + str(PLAYER_VIEW_X))
-            editing = str(input(
-                "Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
+            editing = str(input("Choose which setting to change, or enter 'Exit' to go back to the menu > ")).title()
             try:
                 if editing == "Z-Levels":
                     WORLD_Z = options_get_value()
