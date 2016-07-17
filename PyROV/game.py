@@ -79,7 +79,7 @@ class World:
                         rand = random.randint(0, 100)
                         if self.can_support(plane_no, row_no, col_no, base):
                             if rand > 10:
-                                base[plane_no][row_no][col_no] = blocks.Rock(plane_no, row_no, col_no)
+                                self.gen_create(blocks.Rock, base, plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
 
@@ -242,7 +242,7 @@ class World:
             self.match_coords(item, thing)
             thing.inventory.append(item)
             thing.refresh_inventory()
-            print("Picked up " + item.name)
+            print("Picked up " + item.s_name())
             thing.power_tick(10)
         else:
             print("It's stuck!")
@@ -251,7 +251,7 @@ class World:
         player.show_inventory()
         item = str(input("Choose an item to drop: "))
         for i in player.inventory:
-            if i.name == item:
+            if i.s_name() == item:
                 self.match_coords(i, player)
                 avail = self.can_move(player)
                 direc = random.randint(1, 5)
@@ -282,7 +282,7 @@ class World:
         print("Inventory: V" + str(thing.inventory_vol) + "/W" + str(thing.inventory_weight))
 
     def handle_input(self, inp):
-        # clear()
+        clear()
         if inp.startswith("Q"):
             self.step(5, player)
         elif inp.startswith("W"):
@@ -302,15 +302,15 @@ class World:
         elif inp.startswith("I"):
             player.show_inventory()
         elif inp.startswith("G"):
-            available = self.get_adjacent(player)
+            available = player.key_list(self.get_adjacent(player))
             print("Adjacent items: ")
-            for item in available:
-                print(item.name)
+            for key, value in available.items():
+                print(key + ": " + value.s_name())
             chose = str(input("Choose which item to grab > "))
             valid = False
-            for item in available:
-                if chose == item.name:
-                    self.grab(item, player)
+            for key, value in available.items():
+                if chose == key:
+                    self.grab(value, player)
                     valid = True
                     break
             if not valid:
