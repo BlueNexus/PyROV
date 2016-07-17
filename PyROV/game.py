@@ -49,6 +49,7 @@ class World:
     def generate_world(self, z, y, x):
         world = self.worldgen_stage_1(z, y, x)
         world = self.worldgen_stage_2(world)
+        world = self.worldgen_stage_3(world)
         return world
 
     def worldgen_stage_1(self, z, y, x):
@@ -81,6 +82,25 @@ class World:
                                 base[plane_no][row_no][col_no] = blocks.Rock(plane_no, row_no, col_no)
         print("Worldgen: Terrain generation complete")
         return base
+
+    def worldgen_stage_3(self, base):
+        print("Worldgen: Placing items")
+        for plane_no, plane in enumerate(base):
+            for row_no, row in enumerate(plane):
+                for col_no, col in enumerate(row):
+                    rand = random.randint(0, 100)
+                    if isinstance(base[plane_no - 1][row_no][col_no], blocks.Rock) and rand > 95:
+                        self.gen_create(objects.Cell, base, plane_no, row_no, col_no)
+        print("Worldgen: Items placed")
+        return base
+
+    def create(self, thing, z, y, x):
+        item = thing(z, y, x)
+        self.sync_coords(thing)
+
+    def gen_create(self, thing, base, z, y, x):
+        item = thing(z, y, x)
+        base[z][y][x] = item
 
     def can_support(self, plane_no, row_no, col_no, base):
         checking = base[plane_no - 1][row_no][col_no]
