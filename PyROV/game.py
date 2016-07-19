@@ -7,10 +7,10 @@ import logging
 
 
 WORLD_Z = 10
-WORLD_Y = 20
-WORLD_X = 20
-PLAYER_VIEW_Y = 6
-PLAYER_VIEW_X = 6
+WORLD_Y = 160
+WORLD_X = 160
+PLAYER_VIEW_Y = 12
+PLAYER_VIEW_X = 12
 DEBUG = True
 player = None
 
