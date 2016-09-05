@@ -18,6 +18,9 @@ class Object:
     def __repr__(self):
         return(self.icon)
 
+    def s_name(self):
+        return(self.name)
+
 class Cell(Object):
     name = "Cell"
     icon = "="
@@ -38,6 +41,9 @@ class Cell(Object):
 
     def get_percentage(self):
         return(int(((self.power / self.float_power) * 100)))
+
+    def s_name(self):
+        return(self.name + "(" + str(self.get_percentage()) + ")")
 
 class CellBasic(Cell):
     name = "PC-Lite Cell"
